@@ -17,7 +17,7 @@ public class PseudoDropMod : BaseUnityPlugin {
     public const string PluginName = "PseudoDropFix";
     public const string PluginVersion = "1.0.0";
 
-    Harmony harmony = new Harmony(PluginGUID);
+    readonly Harmony harmony = new Harmony(PluginGUID);
 
     void Awake() {
         Log = base.Logger;

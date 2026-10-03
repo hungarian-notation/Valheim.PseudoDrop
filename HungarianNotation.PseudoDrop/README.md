@@ -1,5 +1,7 @@
 This mod adjusts the vanilla game's bugged Pseudo Drop algorithm that is used for rare items to restore their intended pre-1.0 drop rates. It does this without disabling the new mechanic that puts an upper limit on how many kills you can get without a drop.
 
+It also fixes the issue where killing starred enemies can actually **reduce** your drop rate for some specific items.
+
 If you simply want to play with purely random pre-1.0 drop mechanics, you don't need a mod! You can use `setkey NoPseudoDrops` to disable the new behavior for your world.
 
 # Overview
@@ -36,7 +38,9 @@ The game falls afoul of the [inspection paradox](https://en.wikipedia.org/wiki/R
 
 The correct method is to pick the first required kills with a triangular distribution, simulating all possible positions in *all possible intervals*.
 
-[Developer Jonathan Smårs has revealed on reddit](https://www.reddit.com/r/valheim/comments/1wt7erc/comment/pcsf3e8/) that a future patch (that seemingly has already been submitted for review to the console platforms) will work to partially mitigate this issue, but from his description it will only ameliorate the compounding nature of this bug. The first drop will still have the bugged reduced odds, which is significant for non-respawning rare mobs like the cultists. That patch will likely break this mod, so expect an update to be required for compatiblity with 1.0.17.
+[Developer Jonathan Smårs has revealed on reddit](https://www.reddit.com/r/valheim/comments/1wt7erc/comment/pcsf3e8/) that a future patch (that seemingly has already been submitted for review to the console platforms) will work to partially mitigate this issue, but from his description it will only ameliorate the compounding nature of this bug. The first drop will still have the bugged reduced odds, which is significant for non-respawning rare mobs like the cultists. That patch will likely break this mod, so expect an update to be required for compatibility with 1.0.17.
+
+The current implementation does not store its own set of counters, so the issue where killing starred enemies disrupts the counter for rare (but not trophy) items still occurs. This will no longer reduce your average drop rate, however. It only breaks the protection against long kill chains without drops. 1.0.17 should include a first-party fix for this issue, so I chose not to duplicate that work.
 
 ## Current Vanilla Drop Rates (10% nominal chance, e.g. a bear trophy or similar)
 
