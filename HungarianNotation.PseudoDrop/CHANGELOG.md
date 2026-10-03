@@ -1,3 +1,5 @@
 ## 0.0.4
 
-- Added Changelog
+- Added CHANGELOG
+- Updated README
+- Fixed another minor issue with the vanilla algorithm.
