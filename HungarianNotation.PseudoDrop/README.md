@@ -1,4 +1,4 @@
-This mod adjusts the vanilla game's bugged Pseudo Drop algorithm that is used for rare items to restore their intended pre-1.0 drop rates.
+This mod adjusts the vanilla game's bugged Pseudo Drop algorithm that is used for rare items to restore their intended pre-1.0 drop rates. It does this without disabling the new mechanic that puts an upper limit on how many kills you can get without a drop.
 
 If you simply want to play with purely random pre-1.0 drop mechanics, you don't need a mod! You can use `setkey NoPseudoDrops` to disable the new behavior for your world.
 
