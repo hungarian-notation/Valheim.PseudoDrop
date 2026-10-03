@@ -5,19 +5,21 @@ using System.Linq;
 using UnityEngine;
 using static CharacterDrop;
 
+namespace HungarianNotation.PseudoDrop;
+
 [HarmonyPatch(typeof(CharacterDrop), "GenerateDropList")]
 public class CharacterDropPatch {
 
     public static void WriteLog(string text) {
-#if DEBUG
-        PseudoDropMod.Log.LogInfo(text);
-#else
-        PseudoDropMod.Log.LogDebug(text);
-#endif
+        if (Plugin.IsLoggingEnabled)
+            Plugin.Logger.LogInfo(text);
     }
 
     [HarmonyPrefix]
     public static void Prefix(CharacterDrop __instance) {
+        if (!Plugin.IsEnabled)
+            return;
+
         WriteLog($"Intercepted GenerateDropList for {__instance.m_character.GetHoverName()} (Level {__instance.m_character.GetLevel()})");
         int levelMultiplier = ((!__instance.m_character) ? 1 : Mathf.Max(1, (int)Mathf.Pow(2f, __instance.m_character.GetLevel() - 1)));
 
@@ -29,9 +31,15 @@ public class CharacterDropPatch {
                 string itemName = drop.m_prefab.name;
 
                 if (!s_pseudoCounter.ContainsKey(itemName) || s_pseudoCounter[itemName].Item1 != dropChance) {
+                    if (s_pseudoCounter.ContainsKey(itemName)) {
+                        WriteLog(
+                            $"Discarding counter with mismatched drop chance: " +
+                            $"chance={s_pseudoCounter[itemName].Item1} counter={s_pseudoCounter[itemName].Item2}");
+                    }
+
                     int injectedCounter = FirstInterval(drop.m_chance);
                     s_pseudoCounter[itemName] = new Tuple<float, int>(drop.m_chance, injectedCounter);
-                    WriteLog($"Initial Drop Counter: item={itemName} chance={dropChance} counter={injectedCounter}");
+                    WriteLog($"Setting initial drop counter: item={itemName} chance={dropChance} counter={injectedCounter}");
                 }
             }
         }
@@ -39,6 +47,9 @@ public class CharacterDropPatch {
 
     [HarmonyPostfix]
     public static void PostFix(CharacterDrop __instance, List<KeyValuePair<GameObject, int>> __result) {
+        if (!Plugin.IsEnabled)
+            return;
+
         int levelMultiplier = ((!__instance.m_character) ? 1 : Mathf.Max(1, (int)Mathf.Pow(2f, __instance.m_character.GetLevel() - 1)));
 
         foreach (var drop in __instance.m_drops) {
@@ -54,12 +65,12 @@ public class CharacterDropPatch {
             int extantCounter = s_pseudoCounter[itemName].Item2;
 
             if (!__result.Any(item => item.Key == drop.m_prefab)) {
-                WriteLog($"Item will drop in {extantCounter} kill{(extantCounter != 1 ? "s" : "")}: item={itemName} chance={dropChance} counter={extantCounter}");
+                WriteLog($"Item \"{itemName}\" will drop in {extantCounter} kill{(extantCounter != 1 ? "s" : "")}; chance={dropChance} counter={extantCounter}");
                 continue;
             } else {
                 var counter = SubsequentInterval(dropChance);
                 s_pseudoCounter[itemName] = new Tuple<float, int>(dropChance, counter);
-                WriteLog($"Confirmed Drop of {itemName} chance={dropChance}; Counter set to {counter} (was {extantCounter})");
+                WriteLog($"Confirmed drop of {itemName} chance={dropChance}; Counter set to {counter} (was {extantCounter})");
             }
         }
     }
