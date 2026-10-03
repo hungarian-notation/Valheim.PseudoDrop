@@ -1,3 +1,7 @@
+## 0.1.1
+
+- ThunderStore housekeeping.
+
 ## 0.1.0 
 
 - Added config options:

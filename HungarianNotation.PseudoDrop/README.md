@@ -12,7 +12,9 @@ This means that the observed drop rates for items dropped by rarer mobs are much
 
 ## Installation
 
-As this mod is intended to simply fix broken vanilla behavior, there is no configuration. It is, however, compatible with mods like [Drop That](https://thunderstore.io/c/valheim/p/ASharpPen/Drop_That/) which can be used to configure the drop rates of items.
+As this mod is intended to simply fix broken vanilla behavior, there is limited configuration. The mod can be disabled with a setting, and there is a (disabled by default) setting for writing the generated kill counters to the BepInEx console.
+
+This mod doesn't allow any configuration of drop rates, but it is compatible (and complimentary) with mods like [Drop That](https://thunderstore.io/c/valheim/p/ASharpPen/Drop_That/) which can be used to configure the drop rates of items.
 
 This mod should be installed on both clients and servers. Jotunn is used to validate this.
 

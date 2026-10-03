@@ -438,3 +438,4 @@ FodyWeavers.xsd
 # Valheim Exceptions
 
 !libraries/Debug/
+/HungarianNotation.PseudoDrop/Package/CHANGELOG.md
