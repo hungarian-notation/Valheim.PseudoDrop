@@ -1,8 +1,8 @@
 {
   "name": "PseudoDropFix",
   "description": "Fixes the game's bugged kill count requirements for rare drops, restoring pre-1.0 drop rates.",
-  "version_number": "0.0.1",
-  "website_url": "",
+  "version_number": "0.0.3",
+  "website_url": "https://github.com/hungarian-notation/Valheim.PseudoDrop",
   "dependencies": [
     "denikson-BepInExPack_Valheim-5.4.2351",
     "ValheimModding-Jotunn-2.30.2"
