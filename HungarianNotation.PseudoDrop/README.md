@@ -1,0 +1,39 @@
+﻿This mod adjusts the bugged PseudoDrop algorithm that is used for rare items to restore their intended pre-1.0 drop rates. 
+
+# Overview
+
+The current version of the game has a bug that makes the first drop of a rare item after a game or server restart take (on average) much longer than it should to spawn, with odds being reduced by up to 50% in the worst case.
+
+This means that the observed drop rates for items dropped by rarer mobs are much lower than intended. This is most disruptive for items like the bear and cultist trophies, but it affects many more items.
+
+# Installation
+
+As this mod is intended to simply fix broken vanilla behaviorm, there is no configuration. It is, however, compatible with mods like [Drop That](https://thunderstore.io/c/valheim/p/ASharpPen/Drop_That/) which can be used to configure the drop rates of items.
+
+This mod should be installed on both clients and servers. Jotunn is used to validate this.
+
+# Details
+
+The game's PseudoDrop algorithm decides how many kills you need to get a certain drop the first time you kill a mob after a restart, and again after each drop. The issue is that the method it uses to pick the first drop counter is incorrect, resulting in the first drop of any play session coming later on average than it should. 
+
+For rarer mobs, **most** drops are the first drop in a game session, meaning that the overall drop rate ends up being much lower than it should be.
+
+This mod patches the item drop logic to ensure that the overall drop rate matches the intended pre-1.0 drop rate, all while retaining the new logic's upper limit on kills between drops.
+
+# Give me the Math!
+
+The game falls afoul of the [inspection paradox](https://en.wikipedia.org/wiki/Renewal_theory#Inspection_paradox). When picking the required kills for the first interval, it assumes that the first drop always occurs following the longest possible delay, and randomly assigns the counter to a possible kill in that interval with an even distribution. This means that the first kill after a restart ends up with half the intended odds, and this nerf compounds over time.
+
+The correct method is to pick the first required kills with a triangular distribution, simulating all possible positions in *all possible intervals*.
+
+[Jonathan Smårs has revealed on reddit](https://www.reddit.com/r/valheim/comments/1wt7erc/comment/pcsf3e8/) that a future patch (that seemingly has already been submitted for review to the console platforms) will work to partially mitigate this issue, but from his description it will only ameliorate the compounding nature of this bug. The first drop will still have the bugged reduced odds, which is significant for non-respawning rare mobs like the cultists. That patch will likely break this mod, so expect a required update for compatiblity with 1.0.17.
+
+## Current Vanilla Drop Rates (10% nominal chance, e.g. a bear trophy or similar)
+
+![Plot: First Drop Probability](https://github.com/hungarian-notation/valheim-statistics/blob/main/plots/pseudo_drop.first.png?raw=true)
+![Plot: Average Drop Rate](https://github.com/hungarian-notation/valheim-statistics/blob/main/plots/pseudo_drop.average.png?raw=true)
+
+## Modded Drop Rates
+
+![Plot: First Drop Probability (Fixed)](https://github.com/hungarian-notation/valheim-statistics/blob/main/plots/pseudo_drop_random_arrival.first.png?raw=true)
+![Plot: Average Drop Rate (Fixed)](https://github.com/hungarian-notation/valheim-statistics/blob/main/plots/pseudo_drop_random_arrival.average.png?raw=true)

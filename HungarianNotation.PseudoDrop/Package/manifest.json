@@ -1,0 +1,10 @@
+{
+  "name": "PseudoDropFix",
+  "description": "A bux fix that adjusts the game's kill requirements for rare drops to restore pre-1.0 drop rates.",
+  "version_number": "0.0.1",
+  "website_url": "",
+  "dependencies": [
+    "denikson-BepInExPack_Valheim-5.4.2351",
+    "ValheimModding-Jotunn-2.30.2"
+  ]
+}
