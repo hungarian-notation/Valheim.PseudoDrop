@@ -70,7 +70,7 @@ public class CharacterDropPatch {
         int totalWeight = (intBound * (intBound + 1)) / 2;
         int randomSample = UnityEngine.Random.Range(1, totalWeight + 1);
         int discriminant = (int)Math.Pow(2 * intBound + 1, 2) - 8 * randomSample;
-        float realInterval = ((2f * intBound + 1f) - (float)Math.Sqrt(discriminant)) / 2.0f;
+        float realInterval = ((2f * intBound + 1f) - Mathf.Sqrt(discriminant)) / 2.0f;
         return Mathf.CeilToInt(realInterval);
     }
 
