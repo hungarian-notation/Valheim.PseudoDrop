@@ -67,6 +67,7 @@ public class CharacterDropPatch {
     public static int FirstInterval(float chance) {
         float realBound = (1.0f / chance * 2.0f) - 1f;
         int intBound = (int)realBound + (UnityEngine.Random.value <= realBound % 1 ? 1 : 0);
+
         int totalWeight = (intBound * (intBound + 1)) / 2;
         int randomSample = UnityEngine.Random.Range(1, totalWeight + 1);
         int discriminant = (int)Math.Pow(2 * intBound + 1, 2) - 8 * randomSample;
@@ -75,6 +76,8 @@ public class CharacterDropPatch {
     }
 
     public static int SubsequentInterval(float chance) {
-        return UnityEngine.Random.Range(1, (int)(1.0f / chance * 2.0f));
+        float realBound = (1.0f / chance * 2.0f);
+        int intBound = (int)realBound + (UnityEngine.Random.value <= realBound % 1 ? 1 : 0);
+        return UnityEngine.Random.Range(1, intBound);
     }
 }
