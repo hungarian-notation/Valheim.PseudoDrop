@@ -1,6 +1,6 @@
 {
   "name": "PseudoDropFix",
-  "description": "A bux fix that adjusts the game's kill requirements for rare drops to restore pre-1.0 drop rates.",
+  "description": "Fixes the game's bugged kill count requirements for rare drops, restoring pre-1.0 drop rates.",
   "version_number": "0.0.1",
   "website_url": "",
   "dependencies": [
