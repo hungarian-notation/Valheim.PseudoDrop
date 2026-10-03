@@ -1,4 +1,4 @@
-﻿This mod adjusts the bugged PseudoDrop algorithm that is used for rare items to restore their intended pre-1.0 drop rates. 
+This mod adjusts the bugged PseudoDrop algorithm that is used for rare items to restore their intended pre-1.0 drop rates. 
 
 # Overview
 
