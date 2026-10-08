@@ -7,8 +7,9 @@ using static CharacterDrop;
 
 namespace HungarianNotation.PseudoDrop;
 
-[HarmonyPatch(typeof(CharacterDrop), "GenerateDropList")]
-public class CharacterDropPatch {
+[HarmonyPatch]
+[HarmonyWrapSafe]
+public class CounterPatch {
 
     public static void WriteLog(string text) {
         if (Plugin.IsLoggingEnabled)
@@ -16,12 +17,23 @@ public class CharacterDropPatch {
     }
 
     [HarmonyPrefix]
-    public static void Prefix(CharacterDrop __instance) {
+    [HarmonyPatch(typeof(CharacterDrop), "GenerateDropList")]
+    public static void GenerateDropList_Prefix(CharacterDrop __instance) {
         if (!Plugin.IsEnabled)
             return;
 
         WriteLog($"Intercepted GenerateDropList for {__instance.m_character.GetHoverName()} (Level {__instance.m_character.GetLevel()})");
-        int levelMultiplier = ((!__instance.m_character) ? 1 : Mathf.Max(1, (int)Mathf.Pow(2f, __instance.m_character.GetLevel() - 1)));
+
+        //var lastHit = __instance?.m_character?.m_lastHit;
+        //var lastAttacker = lastHit?.GetAttacker();
+
+        //if (lastAttacker && lastAttacker.IsPlayer() && lastAttacker is Player player) {
+        //    string playerName = player.GetPlayerName();
+        //    var playerId = lastAttacker.IsPlayer() ? ((Player)lastAttacker).GetPlayerID().ToString() : null;
+        //    WriteLog($"\tKilled by player: {playerName}");
+        //}
+
+        int levelMultiplier = GetLevelMultiplier(__instance);
 
         foreach (var drop in __instance.m_drops) {
             float dropChance = drop.m_chance;
@@ -46,18 +58,17 @@ public class CharacterDropPatch {
     }
 
     [HarmonyPostfix]
-    public static void PostFix(CharacterDrop __instance, List<KeyValuePair<GameObject, int>> __result) {
+    [HarmonyPatch(typeof(CharacterDrop), "GenerateDropList")]
+    public static void GenerateDropList_Postfix(CharacterDrop __instance, List<KeyValuePair<GameObject, int>> __result) {
         if (!Plugin.IsEnabled)
             return;
 
-        int levelMultiplier = ((!__instance.m_character) ? 1 : Mathf.Max(1, (int)Mathf.Pow(2f, __instance.m_character.GetLevel() - 1)));
+        int levelMultiplier = GetLevelMultiplier(__instance);
 
         foreach (var drop in __instance.m_drops) {
             string itemName = drop.m_prefab.name;
-            float dropChance = drop.m_chance;
 
-            if (drop.m_levelMultiplier)
-                dropChance *= levelMultiplier;
+            float dropChance = GetDropChance(drop, levelMultiplier);
 
             if (dropChance > 0.3)
                 continue;
@@ -73,7 +84,32 @@ public class CharacterDropPatch {
                 WriteLog($"Confirmed drop of {itemName} chance={dropChance}; Counter set to {counter} (was {extantCounter})");
             }
         }
+
     }
+
+    private static float GetDropChance(Drop drop, int levelMultiplier) {
+        float dropChance = drop.m_chance;
+        if (drop.m_levelMultiplier)
+            dropChance *= levelMultiplier;
+        return dropChance;
+    }
+
+    private static int GetLevelMultiplier(CharacterDrop characterDrop) {
+        return ((!characterDrop.m_character) ? 1 : Mathf.Max(1, (int)Mathf.Pow(2f, characterDrop.m_character.GetLevel() - 1)));
+    }
+
+    //[HarmonyTranspiler]
+    //[HarmonyPatch(typeof(CharacterDrop), "GenerateDropList")]
+    //public static IEnumerable<CodeInstruction> MyTranspiler(IEnumerable<CodeInstruction> instructions) {
+    //    var indexProperty = typeof(Dictionary<string, Tuple<float, int>>).GetProperty("Item");
+    //    var indexSetter = indexProperty?.GetSetMethod();
+    //    var matcher = new CodeMatcher(instructions).MatchForward(false, new CodeMatch(OpCodes.Callvirt, indexSetter)).Repeat(matcher => {
+    //        Plugin.Logger.LogError($"Matched {matcher.Instruction} at {matcher.Pos}");
+    //        matcher.Advance(1);
+    //    });
+
+    //    return matcher.InstructionEnumeration();
+    //}
 
     public static int FirstInterval(float chance) {
         float realBound = (1.0f / chance * 2.0f) - 1f;

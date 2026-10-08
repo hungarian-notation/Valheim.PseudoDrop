@@ -1,6 +1,6 @@
 This mod adjusts the vanilla game's bugged Pseudo Drop algorithm that is used for rare items to restore their intended pre-1.0 drop rates. It does this without disabling the new mechanic that puts an upper limit on how many kills you can get without a drop.
 
-It also fixes the issue where killing starred enemies can actually **reduce** your drop rate for some specific items.
+It also mitigates the issue where killing starred enemies can actually **reduce** your drop rate for some specific items.
 
 If you simply want to play with purely random pre-1.0 drop mechanics, you don't need a mod! You can use `setkey NoPseudoDrops` to disable the new behavior for your world.
 
@@ -40,25 +40,33 @@ The game falls afoul of the [inspection paradox](https://en.wikipedia.org/wiki/R
 
 The correct method is to pick the first required kills with a triangular distribution, simulating all possible positions in *all possible intervals*.
 
-[Developer Jonathan Smårs has revealed on reddit](https://www.reddit.com/r/valheim/comments/1wt7erc/comment/pcsf3e8/) that a future patch (that seemingly has already been submitted for review to the console platforms) will work to partially mitigate this issue, but from his description it will only ameliorate the compounding nature of this bug. The first drop will still have the bugged reduced odds, which is significant for non-respawning rare mobs like the cultists. That patch will likely break this mod, so expect an update to be required for compatibility with 1.0.17.
+[Developer Jonathan Smårs has revealed on reddit](https://www.reddit.com/r/valheim/comments/1wt7erc/comment/pcsf3e8/) that a future patch (that seemingly has already been submitted for review to the console platforms) will work to partially mitigate this issue, but from his description it will only ameliorate the compounding nature of this bug. The first drop will still have the bugged reduced odds, which is significant for non-respawning rare mobs like the cultists. That patch will likely break this mod, so expect an update to be required for compatibility.
 
-The current implementation does not store its own set of counters, so the issue where killing starred enemies disrupts the counter for rare (but not trophy) items still occurs. This will no longer reduce your average drop rate, however. It only breaks the protection against long kill chains without drops. 1.0.17 should include a first-party fix for this issue, so I chose not to duplicate that work.
+### Valheim 1.17 Drop Rates
 
-### Current Vanilla Drop Rates
-
-Here's the current behavior in Valheim 1.0.16
+Here's the current behavior. Any datapoints in these plots that fall below the blue "Nominal" series represent a nerf.
 
 ![Plot: First Drop Probability](https://github.com/hungarian-notation/valheim-statistics/blob/main/plots/pseudo_drop.first.png?raw=true)
+
+This plot shows how the bugged algorithm affects total observed drop rates over time.
+
 ![Plot: Average Drop Rate](https://github.com/hungarian-notation/valheim-statistics/blob/main/plots/pseudo_drop.average.png?raw=true)
+
+Unfortunately, nearly **all** datapoints fall below the nominal series.
+
+Technically you now have a better chance to receive your first drop before kill 17 or later, but due to how much less likely you are to receieve a drop overall, you still end up with fewer drops on average in all scenarios.
 
 ### Patched Drop Rates
 
-This is the behavior when playing with this mod.
+Here's the behavior after installing this mod.
+
+The first drop odds are always as good as or better than the pre-1.0 odds, and the upper bound on single-session consecutive kills without a drop is preserved.
 
 ![Plot: First Drop Probability (Fixed)](https://github.com/hungarian-notation/valheim-statistics/blob/main/plots/pseudo_drop_random_arrival.first.png?raw=true)
-![Plot: Average Drop Rate (Fixed)](https://github.com/hungarian-notation/valheim-statistics/blob/main/plots/pseudo_drop_random_arrival.average.png?raw=true)
 
-Note that even though your first drop might come a bit earlier than you'd expect, it doesn't mean your average drop rate is any higher. This was likely the intended behavior of the new algorithm.
+Even though the grind for that first drop is now likely shorter than it would have been before 1.0, the long-term observed drop rate matches the pre-1.0 odds exactly in all cases:
+
+![Plot: Average Drop Rate (Fixed)](https://github.com/hungarian-notation/valheim-statistics/blob/main/plots/pseudo_drop_random_arrival.average.png?raw=true)
 
 ## AI Disclosure
 

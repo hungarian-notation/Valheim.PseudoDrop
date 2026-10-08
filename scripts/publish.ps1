@@ -54,6 +54,31 @@ if ($Target.Equals("Debug")) {
     Copy-Item -Path "$TargetPath\$name.dll.mdb" -Destination "$plug" -Force
 }
 
+if ($Target.Equals("Release")) {
+    Write-Host "Copying release Dll..."
+
+    if ($DeployPath.Equals("")){
+      $DeployPath = "$ValheimPath\BepInEx\plugins"
+    }
+    
+    $plug = New-Item -Type Directory -Path "$DeployPath\$name" -Force
+    Write-Host "Copy $TargetAssembly to $plug"
+    Copy-Item -Path "$TargetPath\$name.dll" -Destination "$plug" -Force
+    
+    Write-Host "Removing debug build artifacts from $plug..."
+
+    $pdbPath = "$plug\$name.pdb"
+    $mdbPath = "$plug\$name.dll.mdb"
+
+    if (Test-Path -Path $pdbPath) {
+        Remove-Item -Path $pdbPath
+    }
+
+    if (Test-Path -Path $mdbPath) {
+        Remove-Item -Path $mdbPath
+    }
+}
+
 if($Target.Equals("Release")) {
     Write-Host "Packaging for ThunderStore..."
     $Package="Package"

@@ -30,7 +30,8 @@ public partial class Plugin : BaseUnityPlugin {
         Instance = this;
         Logger = base.Logger;
         CreateConfig();
-        harmony.PatchAll();
+
+        harmony.PatchAll(typeof(CounterPatch));
 
         Logger.LogDebug($"version={PluginVersion}");
     }

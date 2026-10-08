@@ -1,3 +1,11 @@
+## 0.2.1
+
+- Minor version bump to address version typo in manifest. Last release is 0.1.2 internally, but ThunderStore thinks it's 0.1.32
+
+## 0.1.2
+
+- Update for 1.0.17
+
 ## 0.1.1
 
 - ThunderStore housekeeping.

@@ -439,3 +439,5 @@ FodyWeavers.xsd
 
 !libraries/Debug/
 /HungarianNotation.PseudoDrop/Package/CHANGELOG.md
+/HungarianNotation.PseudoDrop/Plugin_Version.cs
+/HungarianNotation.PseudoDrop/Package/manifest.json

@@ -1,0 +1,22 @@
+﻿<#@ template debug="true" hostspecific="true" language="C#" #>
+<#@ output extension=".json" #>
+<#@ assembly name="System.Core" #>
+<#@ assembly name="System.Xml" #>
+<#@ assembly name="System.Xml.Linq" #>
+<#@ import namespace="System.IO" #>
+<#@ import namespace="System.Xml.Linq" #>
+<#@ import namespace="System.Xml.XPath" #>
+<#        
+    XDocument doc = XDocument.Load(Directory.GetFiles(Path.GetDirectoryName(Path.GetDirectoryName(this.Host.TemplateFile)), "*.csproj")[0]);
+    string versionString = doc.XPathSelectElement("/Project/PropertyGroup/Version")?.Value;
+#>
+{
+  "name": "PseudoDropFix",
+  "description": "Fixes the game's bugged kill count requirements for rare drops, restoring pre-1.0 drop rates.",
+  "version_number": "<#= versionString #>",
+  "website_url": "https://github.com/hungarian-notation/Valheim.PseudoDrop",
+  "dependencies": [
+    "denikson-BepInExPack_Valheim-5.4.2351",
+    "ValheimModding-Jotunn-2.30.2"
+  ]
+}
